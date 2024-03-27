@@ -2,6 +2,7 @@
 
 from tkinter import *
 from tkinter import ttk
+import subprocess
 
 root = Tk()
 
@@ -42,13 +43,13 @@ class SignUp:
 
         #Already Have An Account
         self.button2 = ttk.Button(master)
-        self.button2.config(text = "Already Have An Account?")
+        self.button2.config(text = "Already Have An Account?",command = self.openSignInPage)
         self.button2.grid(row=4,column=1)
 
     def emailVerification(self):
         email = self.entry1.get()
         print(email)
-        
+
         if '@' not in email:
             print("Error", "Invalid email format: '@' symbol is missing")
         else:
@@ -72,10 +73,11 @@ class SignUp:
             print("Both password match.")
         else:
             print("Passwords do not match.")
+
+    def openSignInPage(self):
+        subprocess.Popen(['python', 'SignIn.py'])
+        root.destroy()
         
-
-
-
 
 
 app = SignUp(root)
