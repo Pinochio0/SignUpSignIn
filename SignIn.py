@@ -5,7 +5,7 @@ from tkinter import ttk
 
 root = Tk()
 
-class GreetingApp:
+class SignIn:
     def __init__(self,master):
         self.label1 = ttk.Label(master)
         self.label1.config(text = "Email: ")
@@ -24,5 +24,11 @@ class GreetingApp:
         self.entry2.grid(row=1,column=1)
 
         self.button1 = ttk.Button(master)
-        self.button1.config(text = "Sign Up")
+        self.button1.config(text = "Sign In")
         self.button1.grid(row=2,column=1)
+
+
+
+app = SignIn(root)
+
+root.mainloop()
