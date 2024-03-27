@@ -40,9 +40,15 @@ class SignUp:
         self.button1.config(text = "Sign Up", command=lambda: [self.emailVerification(),self.password(),self.passwordVerification()])
         self.button1.grid(row=3,column=1)
 
+        #Already Have An Account
+        self.button2 = ttk.Button(master)
+        self.button2.config(text = "Already Have An Account?")
+        self.button2.grid(row=4,column=1)
+
     def emailVerification(self):
         email = self.entry1.get()
         print(email)
+        
         if '@' not in email:
             print("Error", "Invalid email format: '@' symbol is missing")
         else:
@@ -52,9 +58,15 @@ class SignUp:
         password = self.entry2.get()
         print(password)
 
+        if password == "":
+            print("Error, no password provided")
+
     def passwordVerification(self):
         password2 = self.entry3.get()
         print(password2)
+
+        if password2 == "":
+            print("Error, no confirmation password provided")
 
         if self.entry2.get() == self.entry3.get():
             print("Both password match.")
@@ -64,7 +76,7 @@ class SignUp:
 
 
 
-    
+
 
 app = SignUp(root)
 
