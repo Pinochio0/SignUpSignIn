@@ -35,7 +35,7 @@ class SignIn:
         self.passwordLabel.grid(row=1,column=0)
 
         self.passwordEntry = ttk.Entry(master)
-        self.passwordEntry.config()
+        self.passwordEntry.config(show = "*")
         self.passwordEntry.grid(row=1,column=1)
 
         self.passwordMessage = ttk.Label(master)
