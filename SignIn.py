@@ -5,6 +5,8 @@ from tkinter import ttk
 import subprocess
 
 root = Tk()
+root.title("Sign In Page")
+root.geometry("350x250+10+10")
 
 class SignIn:
     def __init__(self,master):
@@ -37,6 +39,7 @@ class SignIn:
         self.button2.config(text = "Don't Have An Account?",command = self.openSignUpPage)
         self.button2.grid(row=3,column=1)
 
+    #allows transfer to sign up page
     def openSignUpPage(self):
         subprocess.Popen(['python', 'SignUp.py'])
         root.destroy()

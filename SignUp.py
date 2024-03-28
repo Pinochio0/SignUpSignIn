@@ -5,36 +5,50 @@ from tkinter import ttk
 import subprocess
 
 root = Tk()
+root.title("Sign Up Page")
+root.geometry("500x250+10+10")
 
 class SignUp:
     def __init__(self,master):
 
         #Email
-        self.label1 = ttk.Label(master)
-        self.label1.config(text = "Email: ")
-        self.label1.grid(row=0,column=0)
+        self.emailLabel = ttk.Label(master)
+        self.emailLabel.config(text = "Email: ")
+        self.emailLabel.grid(row=0,column=0)
 
-        self.entry1 = ttk.Entry(master)
-        self.entry1.config()
-        self.entry1.grid(row=0,column=1)
+        self.emailEntry = ttk.Entry(master)
+        self.emailEntry.config()
+        self.emailEntry.grid(row=0,column=1)
+
+        self.emailMessage = ttk.Label(master)
+        self.emailMessage.config(text = "a")
+        self.emailMessage.grid(row=0,column=2)
 
         #Password
-        self.label2 = ttk.Label(master)
-        self.label2.config(text = "Password: ")
-        self.label2.grid(row=1,column=0)
+        self.passwordLabel = ttk.Label(master)
+        self.passwordLabel.config(text = "Password: ")
+        self.passwordLabel.grid(row=1,column=0)
 
-        self.entry2 = ttk.Entry(master)
-        self.entry2.config()
-        self.entry2.grid(row=1,column=1)
+        self.passwordEntry = ttk.Entry(master)
+        self.passwordEntry.config()
+        self.passwordEntry.grid(row=1,column=1)
+
+        self.passwordMessage = ttk.Label(master)
+        self.passwordMessage.config(text = "b")
+        self.passwordMessage.grid(row=1,column=2)
 
         #confirm password
-        self.label3 = ttk.Label(master)
-        self.label3.config(text = "Confirm Password: ")
-        self.label3.grid(row=2,column=0)
+        self.passwordConfLabel = ttk.Label(master)
+        self.passwordConfLabel.config(text = "Confirm Password: ")
+        self.passwordConfLabel.grid(row=2,column=0)
 
-        self.entry3 = ttk.Entry(master)
-        self.entry3.config()
-        self.entry3.grid(row=2,column=1)
+        self.passwordConfEntry = ttk.Entry(master)
+        self.passwordConfEntry.config()
+        self.passwordConfEntry.grid(row=2,column=1)
+
+        self.passwordConfMessage = ttk.Label(master)
+        self.passwordConfMessage.config(text = "c")
+        self.passwordConfMessage.grid(row=2,column=2)
 
         #Sign Up Button
         self.button1 = ttk.Button(master)
@@ -46,34 +60,39 @@ class SignUp:
         self.button2.config(text = "Already Have An Account?",command = self.openSignInPage)
         self.button2.grid(row=4,column=1)
 
+    #verifies email is properly entered
     def emailVerification(self):
-        email = self.entry1.get()
-        print(email)
+        email = self.emailEntry.get()
 
         if '@' not in email:
-            print("Error", "Invalid email format: '@' symbol is missing")
+            self.emailMessage.config(text = "Invalid email format: '@' symbol is missing")
         else:
-            print("Email is valid.")
+            self.emailMessage.config(text = "Email is valid")
 
+    #verifies password is properly entered
     def password(self):
-        password = self.entry2.get()
-        print(password)
+        password = self.passwordEntry.get()
 
         if password == "":
-            print("Error, no password provided")
+            self.passwordMessage.config(text = "Error, no password provided")
+        else:
+            self.passwordMessage.config(text = "Password is valid")
 
+    #verifies confirmation password is properly entered
     def passwordVerification(self):
-        password2 = self.entry3.get()
-        print(password2)
+        password2 = self.passwordConfEntry.get()
 
         if password2 == "":
-            print("Error, no confirmation password provided")
+            self.passwordConfMessage.config(text = "Error, no confirmation password provided")
 
-        if self.entry2.get() == self.entry3.get():
-            print("Both password match.")
+        if self.passwordEntry.get() != self.passwordConfEntry.get():
+            self.passwordConfMessage.config(text = "Passwords do not match")
         else:
-            print("Passwords do not match.")
+            self.passwordConfMessage.config(text = "Passwords match")
 
+
+
+    #allows transfer to sign in page
     def openSignInPage(self):
         subprocess.Popen(['python', 'SignIn.py'])
         root.destroy()
