@@ -42,11 +42,12 @@ class SignIn:
         self.signIn.config(text = "Sign In",command=lambda: [self.emailGrab(),self.passwordGrab()])
         self.signIn.grid(row=2,column=1)
 
-    #Already Have An Account
+        #Already Have An Account
         self.button2 = ttk.Button(master)
         self.button2.config(text = "Don't Have An Account?",command = self.openSignUpPage)
         self.button2.grid(row=3,column=1)
 
+#-------------------------------------------------------------------------------------------------------------------------
     #allows transfer to sign up page
     def openSignUpPage(self):
         subprocess.Popen(['python', 'SignUp.py'])
@@ -70,6 +71,8 @@ class SignIn:
         else:
             self.passwordMessage.config(text = "")
 
+
+#-------------------------------------------------------------------------------------------------------------------------
 
 
 app = SignIn(root)
