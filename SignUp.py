@@ -21,7 +21,7 @@ class SignUp:
         self.emailEntry.grid(row=0,column=1)
 
         self.emailMessage = ttk.Label(master)
-        self.emailMessage.config(text = "a")
+        self.emailMessage.config()
         self.emailMessage.grid(row=0,column=2)
 
         #Password
@@ -34,7 +34,7 @@ class SignUp:
         self.passwordEntry.grid(row=1,column=1)
 
         self.passwordMessage = ttk.Label(master)
-        self.passwordMessage.config(text = "b")
+        self.passwordMessage.config()
         self.passwordMessage.grid(row=1,column=2)
 
         #confirm password
@@ -47,7 +47,7 @@ class SignUp:
         self.passwordConfEntry.grid(row=2,column=1)
 
         self.passwordConfMessage = ttk.Label(master)
-        self.passwordConfMessage.config(text = "c")
+        self.passwordConfMessage.config()
         self.passwordConfMessage.grid(row=2,column=2)
 
         #Sign Up Button
@@ -81,14 +81,14 @@ class SignUp:
     #verifies confirmation password is properly entered
     def passwordVerification(self):
         password2 = self.passwordConfEntry.get()
-
-        if password2 == "":
-            self.passwordConfMessage.config(text = "Error, no confirmation password provided")
-
+        
         if self.passwordEntry.get() != self.passwordConfEntry.get():
             self.passwordConfMessage.config(text = "Passwords do not match")
         else:
             self.passwordConfMessage.config(text = "Passwords match")
+
+        if password2 == "":
+            self.passwordConfMessage.config(text = "Error, no confirmation password provided")
 
 
 

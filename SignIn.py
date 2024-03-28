@@ -6,7 +6,7 @@ import subprocess
 
 root = Tk()
 root.title("Sign In Page")
-root.geometry("350x250+10+10")
+root.geometry("500x250+10+10")
 
 class SignIn:
     def __init__(self,master):
