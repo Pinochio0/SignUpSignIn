@@ -3,6 +3,7 @@
 from tkinter import *
 from tkinter import ttk
 import subprocess
+import sqlite3
 
 root = Tk()
 root.title("Sign In Page")
@@ -10,6 +11,10 @@ root.geometry("500x250+10+10")
 
 class SignIn:
     def __init__(self,master):
+
+        # Database initialization
+        self.conn = sqlite3.connect('users.db')
+        self.cursor = self.conn.cursor()
 
         #Email
         self.emailLabel = ttk.Label(master)
@@ -39,7 +44,7 @@ class SignIn:
 
         #Sign In
         self.signIn = ttk.Button(master)
-        self.signIn.config(text = "Sign In",command=lambda: [self.emailGrab(),self.passwordGrab()])
+        self.signIn.config(text = "Sign In",command=lambda: [self.validate_credentials()])
         self.signIn.grid(row=2,column=1)
 
         #Already Have An Account
@@ -53,23 +58,23 @@ class SignIn:
         subprocess.Popen(['python', 'SignUp.py'])
         root.destroy()
 
-    #grabs email
-    def emailGrab(self):
+    def validate_credentials(self):
         email = self.emailEntry.get()
-
-        if '@' not in email:
-            self.emailMessage.config(text = "Invalid email format: '@' symbol is missing")
-        else:
-            self.emailMessage.config(text = "Email is valid")
-
-    #grabs password
-    def passwordGrab(self):
         password = self.passwordEntry.get()
 
-        if password == "":
-            self.passwordMessage.config(text = "Error, no password provided")
+        # Check if the email and password match the records in the database
+        self.cursor.execute("SELECT * FROM users WHERE email=? AND password=?", (email, password))
+        user = self.cursor.fetchone()
+
+        if user:
+            self.emailMessage.config(text="Login successful", foreground="green")
+            self.passwordMessage.config(text="")
         else:
-            self.passwordMessage.config(text = "")
+            self.emailMessage.config(text="Email or password is incorrect", foreground="red")
+            self.passwordMessage.config(text="")
+
+    def __del__(self):
+        self.conn.close()
 
 
 #-------------------------------------------------------------------------------------------------------------------------

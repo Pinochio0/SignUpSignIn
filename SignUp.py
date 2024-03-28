@@ -4,7 +4,6 @@ from tkinter import *
 from tkinter import ttk
 import subprocess
 import sqlite3
-import os
 
 root = Tk()
 root.title("Sign Up Page")
@@ -12,6 +11,11 @@ root.geometry("500x250+10+10")
 
 class SignUp:
     def __init__(self,master):
+
+        # Database initialization
+        self.conn = sqlite3.connect('users.db')
+        self.cursor = self.conn.cursor()
+        self.create_table()
 
         #Email
         self.emailLabel = ttk.Label(master)
@@ -54,7 +58,7 @@ class SignUp:
 
         #Sign Up Button
         self.button1 = ttk.Button(master)
-        self.button1.config(text = "Sign Up", command=lambda: [self.emailVerification(),self.password(),self.passwordVerification(),self.create_table(),self.sign_up(),self.check_database()])
+        self.button1.config(text = "Sign Up", command=lambda: [self.create_table(),self.signup()])
         self.button1.grid(row=3,column=1)
 
         #Already Have An Account
@@ -64,75 +68,36 @@ class SignUp:
 
 #-------------------------------------------------------------------------------------------------------------------------
 
-    #verifies email is properly entered
-    def emailVerification(self):
+    def create_table(self):
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS users
+                               (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                email TEXT NOT NULL,
+                                password TEXT NOT NULL)''')
+        self.conn.commit()
+
+    def signup(self):
         email = self.emailEntry.get()
+        password = self.passwordEntry.get()
+        password_conf = self.passwordConfEntry.get()
 
         if '@' not in email:
-            self.emailMessage.config(text = "Invalid email format: '@' symbol is missing")
+            self.emailMessage.config(text="Invalid email format: '@' symbol is missing")
+        elif not password:
+            self.passwordMessage.config(text="Error, no password provided")
+        elif password != password_conf:
+            self.passwordConfMessage.config(text="Passwords do not match")
         else:
-            self.emailMessage.config(text = "Email is valid")
-
-    #verifies password is properly entered
-    def password(self):
-        password = self.passwordEntry.get()
-
-        if password == "":
-            self.passwordMessage.config(text = "Error, no password provided")
-        else:
-            self.passwordMessage.config(text = "Password is valid")
-
-    #verifies confirmation password is properly entered
-    def passwordVerification(self):
-        password2 = self.passwordConfEntry.get()
-
-        if self.passwordEntry.get() != self.passwordConfEntry.get():
-            self.passwordConfMessage.config(text = "Passwords do not match")
-        else:
-            self.passwordConfMessage.config(text = "Passwords match")
-
-        if password2 == "":
-            self.passwordConfMessage.config(text = "Error, no confirmation password provided")
+            self.cursor.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, password))
+            self.conn.commit()
+            self.emailMessage.config(text="User signed up successfully")
+            self.passwordMessage.config(text="")
+            self.passwordConfMessage.config(text="")
 
     #allows transfer to sign in page
     def openSignInPage(self):
         subprocess.Popen(['python', 'SignIn.py'])
         root.destroy()
 
-    def create_table(self):
-        conn = sqlite3.connect('user_database.db')
-        c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS users
-                 (id INTEGER PRIMARY KEY, email TEXT, password TEXT)''')
-        conn.commit()
-        conn.close()
-
-    def insert_data(self, email, password):
-        conn = sqlite3.connect('user_database.db')
-        c = conn.cursor()
-        c.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, password))
-        conn.commit()
-        conn.close()
-
-    def sign_up(self):
-        email = self.emailEntry.get()
-        password = self.passwordEntry.get()
-        self.insert_data(email, password)
-        print("User signed up successfully.")
-
-    def check_database(self):
-        if os.path.exists('user_database.db'):
-            conn = sqlite3.connect('user_database.db')
-            c = conn.cursor()
-            c.execute("SELECT COUNT(*) FROM users")
-            count = c.fetchone()[0]
-            conn.close()
-            if count > 0:
-                print("Database exists and has been populated.")
-            else:
-                print("Database exists but has not been populated yet.")
-        else:
-            print("Database does not exist.")
         
 #-------------------------------------------------------------------------------------------------------------------------
 
